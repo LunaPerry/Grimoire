@@ -33,8 +33,15 @@ class Game:
         """ Starts a new game """
         # Group Sprites
         self.all_sprites = pyg.sprite.Group()
-        self.player = Player()
+        self.platforms = pyg.sprite.Group()
+        # Reference
+        self.player = Player(self)
+
         self.all_sprites.add(self.player)
+        for plat in PL_LIST:
+            p = Platform(*plat)
+            self.all_sprites.add(p)
+            self.platforms.add(p)
         self.run()
 
     def draw(self):
@@ -46,6 +53,12 @@ class Game:
     def update(self):
         """ Updates Game """
         self.all_sprites.update()
+        # Check for collision with platform if falling
+        if self.player.vel.y > 0:
+            collision = pyg.sprite.spritecollide(self.player, self.platforms, False)
+            if collision:
+                self.player.pos.y = collision[0].rect.top + 1
+                self.player.vel.y = 0
 
     def events(self):
         """ Checks for Events """
@@ -55,6 +68,10 @@ class Game:
                 if self.playing:
                     self.playing = False
                 self.running = False
+            # Checks for space key to jump
+            if event.type == pyg.KEYDOWN:
+                if event.key == pyg.K_SPACE:
+                    self.player.jump()
 
     def start_screen(self):
         """ Starting Screen """

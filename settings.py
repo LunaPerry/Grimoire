@@ -16,3 +16,11 @@ CYAN = (0, 255, 255)
 # Player Props
 P_ACC = 0.45
 P_FRICTION = -0.15
+P_GRAVITY = 0.4
+
+# First Platforms (x, y, w, h)
+PL_LIST = [(0, HEIGHT - 40, WIDTH, 40),
+            (W2 - 50, HEIGHT * 3/4, 100, 20),
+            (300, 200, 75, 30),
+            (200, 300, 75, 30),
+            (100, 300, 75, 30)]

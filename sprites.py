@@ -3,9 +3,11 @@ from settings import *
 vect = pyg.math.Vector2
 
 class Player(pyg.sprite.Sprite):
-    def __init__(self):
+
+    def __init__(self, game):
         """ Initialize Player Sprite """
         pyg.sprite.Sprite.__init__(self)
+        self.game = game
         self.image = pyg.Surface((30,40))
         self.image.fill(PINK)
         self.rect = self.image.get_rect()
@@ -18,7 +20,7 @@ class Player(pyg.sprite.Sprite):
 
     def update(self):
         """ Updates Player Sprite """
-        self.acc = vect(0, 0)
+        self.acc = vect(0, P_GRAVITY)
         keys = pyg.key.get_pressed()
 
         # Changes Acceleration left/right
@@ -28,7 +30,7 @@ class Player(pyg.sprite.Sprite):
             self.acc.x = P_ACC
 
         # Accounts for Friction
-        self.acc += self.vel * P_FRICTION
+        self.acc.x += self.vel.x * P_FRICTION
         
         # Adds acceleration to Velocity
         # Changes Position
@@ -42,4 +44,23 @@ class Player(pyg.sprite.Sprite):
             self.pos.x = WIDTH
 
         #Sets sprite to new position
-        self.rect.center = self.pos
+        self.rect.midbottom = self.pos
+    
+    def jump(self):
+        """ Jump if on a platform """
+        self.rect.x += 1
+        collision = pyg.sprite.spritecollide(self, self.game.platforms, False)
+        self.rect.x -= 1
+        if collision:
+            self.vel.y = -12
+
+class Platform(pyg.sprite.Sprite):
+    def __init__(self, x, y, w, h):
+        pyg.sprite.Sprite.__init__(self)
+        # Create Image
+        self.image = pyg.Surface((w, h))
+        self.image.fill(WHITE)
+        # Place rectangle
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
