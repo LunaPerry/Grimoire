@@ -35,9 +35,9 @@ class Player(pyg.sprite.Sprite):
         # Adds acceleration to Velocity
         # Changes Position
         self.vel += self.acc
-        self.pos += self.vel + 0.5 * self.acc
+        self.pos += self.vel + (0.5 * self.acc)
 
-        # Wrap around the sides of the screen
+        # Wrap around the sides of the screen for testing purposes
         if self.pos.x > WIDTH:
             self.pos.x = 0
         if self.pos.x < 0:
@@ -47,12 +47,12 @@ class Player(pyg.sprite.Sprite):
         self.rect.midbottom = self.pos
     
     def jump(self):
-        """ Jump if on a platform """
+        """ Jump only if on a platform """
         self.rect.x += 1
         collision = pyg.sprite.spritecollide(self, self.game.platforms, False)
-        self.rect.x -= 1
+        self.rect.y -= 1
         if collision:
-            self.vel.y = -12
+            self.vel.y = -20
 
 class Platform(pyg.sprite.Sprite):
     def __init__(self, x, y, w, h):

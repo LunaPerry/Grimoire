@@ -59,6 +59,23 @@ class Game:
             if collision:
                 self.player.pos.y = collision[0].rect.top + 1
                 self.player.vel.y = 0
+        # Handle camera movement
+        # Camera Up
+        if self.player.rect.top <= HEIGHT * 0.25:
+            self.player.pos.y += abs(self.player.vel.y)
+            for plat in self.platforms:
+                plat.rect.y += abs(self.player.vel.y)
+                if plat.rect.top >= HEIGHT:
+                    plat.kill()
+
+        # New platform spawns
+        while len(self.platforms) < 7:
+            width = random.randrange(45, 85)
+            p = Platform(random.randrange(0, WIDTH-width), random.randrange(-75, -35), width, 20)
+
+            self.platforms.add(p)
+            self.all_sprites.add(p)
+
 
     def events(self):
         """ Checks for Events """
