@@ -6,6 +6,7 @@ HEIGHT = 720
 W2 = WIDTH / 2
 H2 = HEIGHT / 2
 TITLE = "Grimoire"
+F_NAME = 'arial'
 
 # Define colors
 PINK = (255, 204, 255)
