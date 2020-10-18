@@ -11,3 +11,7 @@ Just a simple platformer made in pygame
 
 - Space: Jump
 - Left/Right arrow keys: Move left/right
+
+### Shoutout
+
+A **big** shoutout to my friend _Guzzy_ for helping me with some bugs and ideas for implementing some features

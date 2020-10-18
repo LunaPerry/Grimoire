@@ -1,6 +1,7 @@
 import pygame as pyg
 from settings import *
 from sprites import *
+from os import path
 import random
 
 class Game:
@@ -17,6 +18,16 @@ class Game:
         self.running = True
         # Matches font
         self.font_name = pyg.font.match_font(F_NAME)
+        # High score
+        self.dir = path.dirname(__file__)
+
+        with open(path.join(self.dir, "score.txt"), 'r+') as file:
+            # Shout out to Guzzy for helping me with this
+            # If try has an error it will text hs to 0 instead
+            try:
+                self.hs = int(file.read())
+            except:
+                self.hs = 0
 
     def run(self):
         """ Main Game Loop """
@@ -128,7 +139,8 @@ class Game:
         # Fill screen and print title/directions
         self.screen.fill(BLACK)
 
-        self.text_io("Grimoire", 40, WHITE, W2, HEIGHT * 0.20)
+        self.text_io("Grimoire", 40, WHITE, W2, HEIGHT * 0.10)
+        self.text_io("Highscore: " + str(self.hs), 40, WHITE, W2, HEIGHT * 0.25)
         self.text_io("Arrows for movement", 30, WHITE, W2, HEIGHT * 0.40)
         self.text_io("Space for jump", 30, WHITE, W2, HEIGHT * 0.60)
         self.text_io("Press a key to start", 30, WHITE, W2, HEIGHT * 0.80)
@@ -159,9 +171,17 @@ class Game:
         # Fill screen and print end screen
         self.screen.fill(BLACK)
 
-        self.text_io("You died", 40, WHITE, W2, HEIGHT * 0.20)
-        self.text_io("Your score: " + str(self.score), 30, WHITE, W2, HEIGHT * 0.40)
+        self.text_io("You died", 50, WHITE, W2, HEIGHT * 0.20)
+        self.text_io("Your score: " + str(self.score), 40, WHITE, W2, HEIGHT * 0.40)
         self.text_io("Press a key to play again", 40, WHITE, W2, HEIGHT * 0.80)
+
+        if self.score > self.hs:
+            self.hs = self.score
+            self.text_io("Woot, new high score!", 50, WHITE, W2, HEIGHT * 0.60)
+            with open(path.join(self.dir, "score.txt"), 'r+') as file:
+                file.write(str(self.score))
+        else:
+            self.text_io("Highscore: " + str(self.hs), 35, WHITE, W2, HEIGHT * 0.60)
 
         pyg.display.flip()
         # Wait for keypresss function
